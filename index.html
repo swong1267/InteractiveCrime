@@ -166,6 +166,36 @@
                         return "1";
                 }
 
+                function changeRadA() {
+                	var newDist = document.getElementById("slidera").value; 
+                	radiusa = newDist * pxpermile; 
+                	svg.select("#point1-radius").remove(); 
+
+                	svg.append("circle")
+		            		.attr("id", "point1-radius")
+		            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
+		            		.attr("r", radiusa)
+		            		.style("fill", "none")
+		            		.style("stroke", "#FF00FF")
+		            		.style("stroke-width", 2)
+
+                }
+
+                function changeRadB() {
+                	var newDist = document.getElementById("sliderb").value; 
+                	radiusb = newDist * pxpermile; 
+                	svg.select("#point2-radius").remove(); 
+
+                	svg.append("circle")
+		            		.attr("id", "point2-radius")
+		            		.attr("transform", "translate(" + ptbx + "," + ptby + ")")
+		            		.attr("r", radiusb)
+		            		.style("fill", "none")
+		            		.style("stroke", "#00FFFF")
+		            		.style("stroke-width", 2)
+
+                }
+
 	            var clickCount = 1;
 
 	            svg.on("click", function() {
@@ -240,7 +270,7 @@
 					<b> 0mi </b>
 				</div>
 				<div class="col-sm-8">
-					<input type="range" id="slidera">
+					<input onmouseup="changeRadA()" type="range" id="slidera">
 				</div>
 				<div class="col-sm-2">
 					<b> 7mi </b>
@@ -251,7 +281,7 @@
 					<b> 0mi </b>
 				</div>
 				<div class="col-sm-8">
-					<input type="range" id="sliderb">
+					<input onmouseup="changeRadB()" type="range" id="sliderb">
 				</div>
 				<div class="col-sm-2">
 					<b> 7mi </b>
