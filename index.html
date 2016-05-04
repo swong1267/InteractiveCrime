@@ -76,30 +76,18 @@
 
                                                       console.log("results" + results);
                                                       return results;
-
                                                   });
 
                               var colorScale = d3.scale.category10();
                               var circles = svg.selectAll("circle").data(filtered_data.data);
-                              // var circles = svg.selectAll("circle")
-                              //                 .data(data)
-                              //               .enter().append("circle")
-                              //               .filter(function(incident) {
-                              //                   var n = incident.Category.localeCompare("CATEGORY");
-                              //                   return n == 0 })
-                              //                 .style("fill", "red")
-                              //                 .attr("r", 3.5)
-                              //                 .attr("cx", function(d) { return x(d.date); })
-                              //                 .attr("cy", function(d) { return y(d.close); });
-
 
                               circles.enter()
                                   .append("circle")
-                                  // .filter(function(incident) {
-                                  //     var str1 = incident.Category;
-                                  //     var str2 = "BURGLARY";
-                                  //     var n = str1.localeCompare(str2);
-                                  //     return n == 0 })
+                                  .filter(function(incident) {
+                                      var str1 = incident.Category;
+                                      var str2 = "BURGLARY";
+                                      var n = str1.localeCompare(str2);
+                                      return n == 0 })
                                   .attr("r", "4px")
                                   .attr("data-id", function(incident) {return incident.IncidentNumber; })
                                   .attr("cx", function(incident) {return projection(incident.Location)[0]; })
