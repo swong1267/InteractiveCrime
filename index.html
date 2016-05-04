@@ -31,6 +31,7 @@
 	            var radiusb = 2 * pxpermile;
                 var r1 = false;
                 var r2 = false;
+                var clickCount = 1;
 
 	            d3.json("scpd_incidents.json", function(error, json) {
 	                console.log(json);
@@ -166,36 +167,45 @@
                 }
 
                 function changeRadA() {
-                	var newDist = document.getElementById("slidera").value;
-                	radiusa = newDist * pxpermile;
-                	svg.select("#point1-radius").remove();
 
-                	svg.append("circle")
-		            		.attr("id", "point1-radius")
-		            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
-		            		.attr("r", radiusa)
-		            		.style("fill", "none")
-		            		.style("stroke", "#FF00FF")
-		            		.style("stroke-width", 2)
+	                	var newDist = document.getElementById("slidera").value;
+	                	radiusa = newDist * pxpermile;
+
+	                if(clickCount > 1) {
+
+	                	svg.select("#point1-radius").remove();
+
+	                	svg.append("circle")
+			            		.attr("id", "point1-radius")
+			            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
+			            		.attr("r", radiusa)
+			            		.style("fill", "none")
+			            		.style("stroke", "#FF00FF")
+			            		.style("stroke-width", 2)
+		            }
 
                 }
 
                 function changeRadB() {
-                	var newDist = document.getElementById("sliderb").value;
-                	radiusb = newDist * pxpermile;
-                	svg.select("#point2-radius").remove();
 
-                	svg.append("circle")
-		            		.attr("id", "point2-radius")
-		            		.attr("transform", "translate(" + ptbx + "," + ptby + ")")
-		            		.attr("r", radiusb)
-		            		.style("fill", "none")
-		            		.style("stroke", "#00FFFF")
-		            		.style("stroke-width", 2)
+                	
+	                	var newDist = document.getElementById("sliderb").value;
+	                	radiusb = newDist * pxpermile;
+
+	                if(clickCount > 2) {
+
+	                	svg.select("#point2-radius").remove();
+
+	                	svg.append("circle")
+			            		.attr("id", "point2-radius")
+			            		.attr("transform", "translate(" + ptbx + "," + ptby + ")")
+			            		.attr("r", radiusb)
+			            		.style("fill", "none")
+			            		.style("stroke", "#00FFFF")
+			            		.style("stroke-width", 2)
+		            }
 
                 }
-
-	            var clickCount = 1;
 
 	            svg.on("click", function() {
 
