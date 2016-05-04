@@ -9,20 +9,20 @@ h1 {
 }
 
 #map-area {
-    display:inline-block; 
+    display:inline-block;
     height: 100%;
     width: 10px;
 }
 
-#filter-area { 
+#filter-area {
 	padding: 10px;
     display:inline-block;
-    height: 100%; 
-    width: 30%;
-    vertical-align: top; 
+    height: 100%;
+    width: 35%;
+    vertical-align: top;
 }
 
-#district, #category, #daytime, #nighttime {
+#day, #category, #daytime, #nighttime {
     display:inline-block;
     padding-top: 0;
     padding-bottom: 0;
@@ -42,4 +42,9 @@ h1 {
 #b {
     color: #00FFFF;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+#category_options, #day_options {
+    height: 210px;
+    overflow: scroll;
 }
