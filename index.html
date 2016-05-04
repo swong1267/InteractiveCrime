@@ -4,7 +4,9 @@
         <meta charset="utf-8">
         <title>CS448B Assignment 3</title>
         <script type="text/javascript" src="d3/d3.js"></script>
+        <script type="text/javascript" src="slider/js/bootstrap-slider.js"></script>s
         <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="stylesheet" type="text/css" href="slider/css/slider.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     </head>
@@ -203,6 +205,10 @@
 			<div id="radius-selection">
 				<h3> Radius </h3>
 				<p> A </p>
+				<b> 0 mi </b> <input id="slidera" type="text" class="span2" value="" data-slider-min="0" data-slider-max="7" data-slider-step="1" data-slider-value="3"/> <b> 7 mi </b>
+				<script> 
+					var slider = new Slider('#slidera', {});
+				</script>
 				<p> B </p>
 			</div>
 			<div id="district-category">
