@@ -20,7 +20,8 @@
                 var filters = [];
                 var catCount = 0; //1
                 var timeCount = 0; //2
-                var dayCount = 0 //3
+                var dayCount = 0; //3
+                var circCount = 0; //4
 	            var data;
 	            var ptax;
 	            var ptay;
@@ -145,14 +146,13 @@
                             var convertedTime = convertTime(d.Time);
                             var timeIndex = filters.indexOf(convertedTime);
 
-                            console.log("catIndex: " + catIndex + " timeIndex: " + timeIndex + " dayIndex:" + dayIndex);
-
-
                             return !((catCount > 0 && catIndex == -1) || (timeCount > 0 && timeIndex == -1) || (dayCount > 0 && dayIndex == -1))
                         })
                         .attr("fill", "#1f77b4");
 
                     }
+
+                    circleFilter();
                 }
 
                 function convertTime(time) {
@@ -188,7 +188,7 @@
 
                 function changeRadB() {
 
-                	
+
 	                	var newDist = document.getElementById("sliderb").value;
 	                	radiusb = newDist * pxpermile;
 
@@ -270,6 +270,14 @@
 		            }
 		            clickCount++;
 
+                    circleFilter();
+
+	            })
+
+
+
+
+                function circleFilter() {
                     if (r1 && r2) {
                         svg.selectAll("circle").data(data.data)
                         .filter(function(incident) {
@@ -283,7 +291,13 @@
                             var radA = radiusa/pxpermile;
                             var radB = radiusb/pxpermile;
 
-                            return (distA > radA || distB > radB)
+                            var catIndex = filters.indexOf(incident.Category);
+                            var dayIndex = filters.indexOf(incident.DayOfWeek.toUpperCase());
+
+                            var convertedTime = convertTime(incident.Time);
+                            var timeIndex = filters.indexOf(convertedTime);
+
+                            return (distA > radA || distB > radB || catIndex == -1 || dayIndex == -1 || timeIndex == -1)
                         })
                         .attr("fill", "transparent"); //outside intersection
 
@@ -300,18 +314,20 @@
                             var radA = radiusa/pxpermile;
                             var radB = radiusb/pxpermile;
 
-                            return !(distA > radA || distB > radB)
+                            var catIndex = filters.indexOf(incident.Category);
+                            var dayIndex = filters.indexOf(incident.DayOfWeek.toUpperCase());
+
+                            var convertedTime = convertTime(incident.Time);
+                            var timeIndex = filters.indexOf(convertedTime);
+
+                            return (!(distA > radA || distB > radB) && !((catCount > 0 && catIndex == -1) || (timeCount > 0 && timeIndex == -1) || (dayCount > 0 && dayIndex == -1)));
                         })
                         .attr("fill", "#1f77b4");
 
 
+
                     }
-	            })
-
-
-
-
-
+                }
 
 
 
