@@ -4,10 +4,15 @@
         <meta charset="utf-8">
         <title>CS448B Assignment 3</title>
         <script type="text/javascript" src="d3/d3.js"></script>
-    </head>
-    <body>
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-        <h1>City of San Francisco Interactive Crime Map | April 1-15, 2016</h1>
+    </head>
+	    <body>
+
+	   	<div id="header">
+	   		<h1> City of San Francisco Interactive Crime Map | April 1 - 15, 2016 </h1>
+	   	</div>
 
         <div class="category_filter_options">
             <input class="filter_button" id="a_button" type="checkbox" name="BURGLARY">BURGLARY</input><br>
@@ -15,102 +20,135 @@
             <input class="filter_button" id="c_button" type="checkbox">c3</input><br>
         </div>
 
-        <script type="text/javascript">
-
-            var data;
-
-            d3.json("scpd_incidents.json", function(error, json) {
-                data = json;
-                console.log(data.data.length);
-                visualize(data);
-            });
-
-            //Set up counter
-            var counter = d3.select("body").append("h2");
+	    <div id="map-area">
+	        <script type="text/javascript">
 
 
-            // Set up size
-            var width = 750,
-                height = width;
+	            var data;
 
-            // Set up projection that map is using
-            var projection = d3.geo.mercator()
-                .center([-122.433701, 37.767683]) // San Francisco, roughly
-                .scale(225000)
-                .translate([width / 2, height / 2]);
-            // This is the mapping between <longitude, latitude> position to <x, y> pixel position on the map
-            // projection([lon, lat]) returns [x, y]
+	            d3.json("scpd_incidents.json", function(error, json) {
+	                console.log(json);
+	                data = json;
+	                visualize(data);
 
-            // Add an svg element to the DOM
-            var svg = d3.select("body").append("svg")
-                .attr("width", width)
-                .attr("height", height);
+	            });
 
-            // Add svg map at correct size, assumes map is saved in a subdirectory called "data"
-            svg.append("image")
-                      .attr("width", width)
-                      .attr("height", height)
-                      .attr("xlink:href", "data/sf-map.svg");
+	            // Set up size
+	            var width = 750,
+	                height = width;
 
+	            // Set up projection that map is using
+	            var projection = d3.geo.mercator()
+	                .center([-122.433701, 37.767683]) // San Francisco, roughly
+	                .scale(225000)
+	                .translate([width / 2, height / 2]);
+	            // This is the mapping between <longitude, latitude> position to <x, y> pixel position on the map
+	            // projection([lon, lat]) returns [x, y]
 
+	            // Add an svg element to the DOM
+	            var svg = d3.select("body").append("svg")
+	                .attr("width", width)
+	                .attr("height", height);
 
-
-            function visualize(data, filters) {
-
-                var filtered_data = data;
-                console.log(filtered_data);
-                var filtered_data = d3.selectAll(".filter_button").on("change", function () {
-                                        console.log(this.name);
-                                        var selected = this.name,
-                                        display = this.checked ? "inline" : "none";
-
-                                        var results = d3.selectAll("circle")
-                                        .filter(function(incident) {
-                                            var n = incident.Category.localeCompare("BURGLARY");
-                                            return n == 0 })
-                                        .attr("display", display);
-
-                                        console.log("results" + results);
-                                        return results;
-
-                                    });
-
-                var colorScale = d3.scale.category10();
-                var circles = svg.selectAll("circle").data(filtered_data.data);
-                // var circles = svg.selectAll("circle")
-                //                 .data(data)
-                //               .enter().append("circle")
-                //               .filter(function(incident) {
-                //                   var n = incident.Category.localeCompare("CATEGORY");
-                //                   return n == 0 })
-                //                 .style("fill", "red")
-                //                 .attr("r", 3.5)
-                //                 .attr("cx", function(d) { return x(d.date); })
-                //                 .attr("cy", function(d) { return y(d.close); });
-
-
-                circles.enter()
-                    .append("circle")
-                    // .filter(function(incident) {
-                    //     var str1 = incident.Category;
-                    //     var str2 = "BURGLARY";
-                    //     var n = str1.localeCompare(str2);
-                    //     return n == 0 })
-                    .attr("r", "4px")
-                    .attr("data-id", function(incident) {return incident.IncidentNumber; })
-                    .attr("cx", function(incident) {return projection(incident.Location)[0]; })
-                    .attr("cy", function(incident) {return projection(incident.Location)[1]; })
-                    .attr("fill", function(incident) {return colorScale(incident.Category); });
-                circles.exit().remove();
-
-                var counter = d3.selectAll("h2").text("Number of Incidents: " + filtered_data.data.length);
-
-
-            }
+	            // Add svg map at correct size, assumes map is saved in a subdirectory called "data"
+	            svg.append("image")
+	                      .attr("width", width)
+	                      .attr("height", height)
+	                      .attr("xlink:href", "data/sf-map.svg");
 
 
 
 
-        </script>
+                          function visualize(data, filters) {
+
+                              var filtered_data = data;
+                              console.log(filtered_data);
+                              var filtered_data = d3.selectAll(".filter_button").on("change", function () {
+                                                      console.log(this.name);
+                                                      var selected = this.name,
+                                                      display = this.checked ? "inline" : "none";
+
+                                                      var results = d3.selectAll("circle")
+                                                      .filter(function(incident) {
+                                                          var n = incident.Category.localeCompare("BURGLARY");
+                                                          return n == 0 })
+                                                      .attr("display", display);
+
+                                                      console.log("results" + results);
+                                                      return results;
+
+                                                  });
+
+                              var colorScale = d3.scale.category10();
+                              var circles = svg.selectAll("circle").data(filtered_data.data);
+                              // var circles = svg.selectAll("circle")
+                              //                 .data(data)
+                              //               .enter().append("circle")
+                              //               .filter(function(incident) {
+                              //                   var n = incident.Category.localeCompare("CATEGORY");
+                              //                   return n == 0 })
+                              //                 .style("fill", "red")
+                              //                 .attr("r", 3.5)
+                              //                 .attr("cx", function(d) { return x(d.date); })
+                              //                 .attr("cy", function(d) { return y(d.close); });
+
+
+                              circles.enter()
+                                  .append("circle")
+                                  // .filter(function(incident) {
+                                  //     var str1 = incident.Category;
+                                  //     var str2 = "BURGLARY";
+                                  //     var n = str1.localeCompare(str2);
+                                  //     return n == 0 })
+                                  .attr("r", "4px")
+                                  .attr("data-id", function(incident) {return incident.IncidentNumber; })
+                                  .attr("cx", function(incident) {return projection(incident.Location)[0]; })
+                                  .attr("cy", function(incident) {return projection(incident.Location)[1]; })
+                                  .attr("fill", function(incident) {return colorScale(incident.Category); });
+                              circles.exit().remove();
+
+                              var counter = d3.selectAll("h2").text("Number of Incidents: " + filtered_data.data.length);
+
+
+                          }
+
+	        </script>
+	    </div>
+
+	    <div id="filter-area" class="panel panel-default">
+			<div class="panel-heading"> <h2> Filters </h2> </div>
+			<div id="radius-selection">
+				<h3> Radius </h3>
+				<p> A </p>
+				<p> B </p>
+			</div>
+			<div id="district-category">
+				<div id="district">
+					<h3> District </h3>
+				</div>
+				<div id="category">
+					<h3> Category </h3>
+				</div>
+			</div>
+			<div id="time-of-day">
+				<h3> Time of Day </h3>
+					<div id="daytime">
+						<div class="checkbox">
+							<label><input type="checkbox" value="">6am - 12pm</label>
+						</div>
+						<div class="checkbox">
+						 	<label><input type="checkbox" value="">12pm - 6pm</label>
+						</div>
+					</div>
+					<div id="nighttime">
+						<div class="checkbox">
+							<label><input type="checkbox" value="">6pm - 12am</label>
+						</div>
+						<div class="checkbox">
+							<label><input type="checkbox" value="">12am - 6am</label>
+						</div>
+					</div>
+			</div>
+	    </div>
     </body>
 </html>
