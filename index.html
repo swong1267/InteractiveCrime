@@ -28,8 +28,9 @@
 	            var ptay;
 	            var ptbx;
 	            var ptby;
-	            var radiusa = 3; 
-	            var radiusb = 3; 
+	            var pxpermile = 60.5; 
+	            var radiusa = 2 * pxpermile; 
+	            var radiusb = 2 * pxpermile;
 
 	            d3.json("scpd_incidents.json", function(error, json) {
 	                console.log(json);
@@ -168,28 +169,36 @@
 
 	            		if(clickCount > 1) {
 	            			svg.select("#point1").remove();
+	            			svg.select("#point1-radius").remove();
 	            		}
 
-		            	ptax = coord[0];
-		            	ptay = coord[1];
+	            		ptax = coord[0];
+	            		ptay = coord[1];
 
 		            	svg.append("circle")
 		            		.attr("id", "point1")
 		            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
-		            		.attr("r", "15")
+		            		.attr("r", "10")
 		            		.attr("class", "location")
 		            		.style("fill", "#FF00FF")
 		            		.style("stroke", "black")
 		            		.style("stroke-width", 2)
 
+		            	proj1 = projection.invert(coord); 
+
 		            	svg.append("circle")
 		            		.attr("id", "point1-radius")
 		            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
-		            		.attr()
+		            		.attr("r", radiusa)
+		            		.style("fill", "none")
+		            		.style("stroke", "#FF00FF")
+		            		.style("stroke-width", 2)
+
 		            } else {
 
 		            	if(clickCount > 2) {
 	            			svg.select("#point2").remove();
+	            			svg.select("#point2-radius").remove();
 	            		}
 
 		            	ptbx = coord[0];
@@ -198,15 +207,24 @@
 		            	svg.append("circle")
 		            		.attr("id", "point2")
 		            		.attr("transform", "translate(" + ptbx + "," + ptby + ")")
-		            		.attr("r", "15")
+		            		.attr("r", "10")
 		            		.attr("class", "location")
 		            		.style("fill", "#00FFFF")
 		            		.style("stroke", "black")
 		            		.style("stroke-width", 2)
+
+		            	proj2 = projection.invert(coord); 
+
+		            	svg.append("circle")
+		            		.attr("id", "point2-radius")
+		            		.attr("transform", "translate(" + ptbx + "," + ptby + ")")
+		            		.attr("r", radiusb)
+		            		.style("fill", "none")
+		            		.style("stroke", "#00FFFF")
+		            		.style("stroke-width", 2)
+
 		            }
 		            clickCount++;
-		            console.log("pta ("+ptax+","+ptay+")");
-		            console.log("ptb ("+ptbx+","+ptby+")");
 	            })
 
 	        </script>
