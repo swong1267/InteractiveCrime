@@ -28,8 +28,9 @@
 	            var ptay;
 	            var ptbx;
 	            var ptby;
-	            var radiusa = 3; 
-	            var radiusb = 3; 
+	            var radiusa = 3;
+	            var radiusb = 3;
+                var counter;
 
 	            d3.json("scpd_incidents.json", function(error, json) {
 	                console.log(json);
@@ -75,7 +76,7 @@
                         .attr("cy", function(incident) {return projection(incident.Location)[1]; })
                         .attr("fill", function(incident) {return colorScale(incident.Category); });
                     circles.exit().remove();
-                    var counter = d3.selectAll("h2").text("Number of Incidents: " + data.data.length);
+                    counter = d3.selectAll("h2").text("Number of Incidents: " + data.data.length);
                 }
 
 
@@ -84,13 +85,13 @@
 
                 function filter(filter_btn){
 
-                    var index = filters.indexOf(filter_btn.value);
+                    var index = filters.indexOf(filter_btn.value.toUpperCase());
                     console.log(filter_btn.name);
 
                     console.log(filters);
                     console.log("catCount: " + catCount + " timeCount: " + timeCount + " dayCount:" + dayCount);
                     if (index == -1) {
-                        filters.push(filter_btn.value);
+                        filters.push(filter_btn.value.toUpperCase());
                         changeCount(filter_btn.name, 1);
                         console.log(filters);
                         console.log("catCount: " + catCount + " timeCount: " + timeCount + " dayCount:" + dayCount);
@@ -122,11 +123,12 @@
                     if (filters.length == 0) {
                         svg.selectAll("circle").data(data.data)
                         .attr("fill", function(incident) {return colorScale(incident.Category); });
+                        counter = d3.selectAll("h2").text("Number of Incidents: " + data.data.length);
                     } else {
                         svg.selectAll("circle").data(data.data)
                         .filter(function(d) {
                             var catIndex = filters.indexOf(d.Category);
-                            var dayIndex = filters.indexOf(d.DayOfWeek);
+                            var dayIndex = filters.indexOf(d.DayOfWeek.toUpperCase());
 
                             var convertedTime = convertTime(d.Time);
                             var timeIndex = filters.indexOf(convertedTime);
@@ -138,14 +140,20 @@
                         svg.selectAll("circle").data(data.data)
                         .filter(function(d) {
                             var catIndex = filters.indexOf(d.Category);
-                            var dayIndex = filters.indexOf(d.DayOfWeek);
+                            var dayIndex = filters.indexOf(d.DayOfWeek.toUpperCase());
 
                             var convertedTime = convertTime(d.Time);
                             var timeIndex = filters.indexOf(convertedTime);
 
+                            console.log("catIndex: " + catIndex + " timeIndex: " + timeIndex + " dayIndex:" + dayIndex);
+
+
                             return !((catCount > 0 && catIndex == -1) || (timeCount > 0 && timeIndex == -1) || (dayCount > 0 && dayIndex == -1))
                         })
                         .attr("fill", function(incident) {return colorScale(incident.Category); });
+
+                        // counter = d3.selectAll("h2").text("Number of Incidents: " + new_data_pts);
+
                     }
                 }
 
@@ -222,44 +230,153 @@
 				<script>
 					function populate()
 					{
-						radiusa = document.getElementById("radiusainput").value; 
+						radiusa = document.getElementById("radiusainput").value;
 					}
 
 					console.log("HERE"+radiusa);
 				</script>
 <!-- 				<b> 0 mi </b> <input id="slidera" type="text" class="span2" value="" data-slider-min="0" data-slider-max="7" data-slider-step="1" data-slider-value="3"/> <b> 7 mi </b>
-				<script> 
+				<script>
 					var slider = new Slider('#slidera', {});
 				</script> -->
 				<p> B </p>
 			</div>
 			<div id="district-category">
-				<div id="district">
+				<div id="day">
 					<h3> Day of Week </h3>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="3" value="Sunday" onchange="filter(this)">Sunday</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="3" value="Monday" onchange="filter(this)">Monday</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="3" value="Tuesday" onchange="filter(this)">Tuesday</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="3" value="Wednesday" onchange="filter(this)">Wednesday</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="3" value="Thursday" onchange="filter(this)">Thursday</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="3" value="Friday" onchange="filter(this)">Friday</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="3" value="Saturday" onchange="filter(this)">Saturday</label>
+                        <div class="day_options">
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="3" value="Sunday" onchange="filter(this)">Sunday</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="3" value="Monday" onchange="filter(this)">Monday</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="3" value="Tuesday" onchange="filter(this)">Tuesday</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="3" value="Wednesday" onchange="filter(this)">Wednesday</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="3" value="Thursday" onchange="filter(this)">Thursday</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="3" value="Friday" onchange="filter(this)">Friday</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="3" value="Saturday" onchange="filter(this)">Saturday</label>
+                            </div>
                         </div>
 				</div>
 				<div id="category">
 					<h3> Category </h3>
+                        <div id="category_options">
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Arson" onchange="filter(this)">Arson</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Assault" onchange="filter(this)">Assault</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Bribery" onchange="filter(this)">Bribery</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Burglary" onchange="filter(this)">Burglary</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Disorderly Conduct" onchange="filter(this)">Disorderly Conduct</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Driving Under the Influence" onchange="filter(this)">Driving Under the Influence</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Drug/Narcotic" onchange="filter(this)">Drug/Narcotic</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Drunkenness" onchange="filter(this)">Drunkenness</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Embezzlement" onchange="filter(this)">Embezzlement</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Extortion" onchange="filter(this)">Extortion</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Family Offenses" onchange="filter(this)">Family Offenses</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Forgery/Counterfeiting" onchange="filter(this)">Forgery/Counterfeiting</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Fraud" onchange="filter(this)">Fraud</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Gambling" onchange="filter(this)">Gambling</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Kidnapping" onchange="filter(this)">Kidnapping</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Larceny/Theft" onchange="filter(this)">Larceny/Theft</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Liquor Laws" onchange="filter(this)">Liquor Laws</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Loitering" onchange="filter(this)">Loitering</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Missing Person" onchange="filter(this)">Missing Person</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Non-criminal" onchange="filter(this)">Non-Criminal</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Other Offenses" onchange="filter(this)">Other Offenses</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Prostitution" onchange="filter(this)">Prostitution</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Robbery" onchange="filter(this)">Robbery</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Runaway" onchange="filter(this)">Runaway</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Secondary Codes" onchange="filter(this)">Secondary Codes</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Sex Offenses, Forcible" onchange="filter(this)">Sex Offenses, Forcible</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Sex Offenses, Non-forcible" onchange="filter(this)">Sex Offenses, Non-forcible</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Stolen Property" onchange="filter(this)">Stolen Property</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Suicide" onchange="filter(this)">Suicide</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Suspicious Occ" onchange="filter(this)">Suspicious Occ</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Trespass" onchange="filter(this)">Trespass</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Vandalism" onchange="filter(this)">Vandalism</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Vehicle Theft" onchange="filter(this)">Vehicle Theft</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Warrants" onchange="filter(this)">Warrants</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="1" value="Weapon Laws" onchange="filter(this)">Weapon Laws</label>
+                            </div>
+                        </div>
 				</div>
 			</div>
 			<div id="time-of-day">
