@@ -64,7 +64,7 @@
                                         var selected = this.name,
                                         display = this.checked ? "inline" : "none";
 
-                                        var results = svg.selectAll("circle")
+                                        var results = d3.selectAll("circle")
                                         .filter(function(incident) {
                                             var n = incident.Category.localeCompare("BURGLARY");
                                             return n == 0 })
