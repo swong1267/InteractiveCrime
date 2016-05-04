@@ -19,6 +19,10 @@
 
 
 	            var data;
+	            var ptax;
+	            var ptay;
+	            var ptbx;
+	            var ptby; 
 
 	            d3.json("scpd_incidents.json", function(error, json) {
 	                console.log(json);
@@ -67,6 +71,50 @@
 	                    .attr("fill", function(incident) {return colorScale(incident.Category); });
 	                circles.exit().remove();
 	            }
+
+	            var clickCount = 1; 
+
+	            svg.on("click", function() {
+	            	var coord = d3.mouse(this);
+	            	if(clickCount % 2 == 1) {
+
+	            		if(clickCount > 1) {
+	            			svg.select("#point1").remove(); 
+	            		}
+
+		            	ptax = coord[0];
+		            	ptay = coord[1];
+
+		            	svg.append("circle")
+		            		.attr("id", "point1")
+		            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
+		            		.attr("r", "15")
+		            		.attr("class", "location")
+		            		.style("fill", "#FF00FF")
+		            		.style("stroke", "black")
+		            		.style("stroke-width", 2)
+		            } else {
+
+		            	if(clickCount > 2) {
+	            			svg.select("#point2").remove(); 
+	            		}
+
+		            	ptbx = coord[0];
+		            	ptby = coord[1];
+
+		            	svg.append("circle")
+		            		.attr("id", "point2")
+		            		.attr("transform", "translate(" + ptbx + "," + ptby + ")")
+		            		.attr("r", "15")
+		            		.attr("class", "location")
+		            		.style("fill", "#00FFFF")
+		            		.style("stroke", "black")
+		            		.style("stroke-width", 2)
+		            }
+		            clickCount++; 
+		            console.log("pta ("+ptax+","+ptay+")");
+		            console.log("ptb ("+ptbx+","+ptby+")");
+	            })
 
 	        </script>
 	    </div>
