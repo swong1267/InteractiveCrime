@@ -4,10 +4,8 @@
         <meta charset="utf-8">
         <title>CS448B Assignment 3</title>
         <script type="text/javascript" src="d3/d3.js"></script>
-<!--         <script type="text/javascript" src="slider/js/bootstrap-slider.js"></script>s
- -->        <link rel="stylesheet" type="text/css" href="index.css">
-<!--         <link rel="stylesheet" type="text/css" href="slider/css/slider.css">
- -->        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     </head>
 	    <body>
@@ -167,6 +165,36 @@
                         return "1";
                 }
 
+                function changeRadA() {
+                	var newDist = document.getElementById("slidera").value; 
+                	radiusa = newDist * pxpermile; 
+                	svg.select("#point1-radius").remove(); 
+
+                	svg.append("circle")
+		            		.attr("id", "point1-radius")
+		            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
+		            		.attr("r", radiusa)
+		            		.style("fill", "none")
+		            		.style("stroke", "#FF00FF")
+		            		.style("stroke-width", 2)
+
+                }
+
+                function changeRadB() {
+                	var newDist = document.getElementById("sliderb").value; 
+                	radiusb = newDist * pxpermile; 
+                	svg.select("#point2-radius").remove(); 
+
+                	svg.append("circle")
+		            		.attr("id", "point2-radius")
+		            		.attr("transform", "translate(" + ptbx + "," + ptby + ")")
+		            		.attr("r", radiusb)
+		            		.style("fill", "none")
+		            		.style("stroke", "#00FFFF")
+		            		.style("stroke-width", 2)
+
+                }
+
 	            var clickCount = 1;
 
 	            svg.on("click", function() {
@@ -194,8 +222,6 @@
 		            		.style("stroke", "black")
 		            		.style("stroke-width", 2)
 
-		            	proj1 = projection.invert(coord);
-
 		            	svg.append("circle")
 		            		.attr("id", "point1-radius")
 		            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
@@ -222,8 +248,6 @@
 		            		.style("fill", "#00FFFF")
 		            		.style("stroke", "black")
 		            		.style("stroke-width", 2)
-
-		            	proj2 = projection.invert(coord);
 
 		            	svg.append("circle")
 		            		.attr("id", "point2-radius")
@@ -324,23 +348,43 @@
 			<div class="panel-heading"> <h2> Filters </h2> </div>
 			<div id="radius-selection">
 				<h3> Radius </h3>
-				<p> A </p>
-				<textarea class="form-control" rows="1" id="radiusainput"></textarea>
-				<button onclick="populate()" id="radiusabutton">Enter</button>
-				<script>
-					function populate()
-					{
-						radiusa = document.getElementById("radiusainput").value;
-					}
+				<h4 id="a"> A </h4>
+				<div class="col-sm-2">
+					<b> 0mi </b>
+				</div>
+				<div class="col-sm-8">
+					<input onmouseup="changeRadA()" type="range" id="slidera">
+				</div>
+				<div class="col-sm-2">
+					<b> 7mi </b>
+				</div>	
+				<br>
+				<h4 id="b"> B </h4>
+				<div class="col-sm-2">
+					<b> 0mi </b>
+				</div>
+				<div class="col-sm-8">
+					<input onmouseup="changeRadB()" type="range" id="sliderb">
+				</div>
+				<div class="col-sm-2">
+					<b> 7mi </b>
+				</div>
 
-					console.log("HERE"+radiusa);
-				</script>
-<!-- 				<b> 0 mi </b> <input id="slidera" type="text" class="span2" value="" data-slider-min="0" data-slider-max="7" data-slider-step="1" data-slider-value="3"/> <b> 7 mi </b>
-				<script>
-					var slider = new Slider('#slidera', {});
-				</script> -->
-				<p> B </p>
 			</div>
+
+			<script> 
+				var a = document.getElementById("slidera"); 
+				a.max = 7; 
+				a.min = 0; 
+				a.defaultValue = 2; 
+				a.step = 1; 
+				var b = document.getElementById("sliderb");
+				b.max = 7; 
+				b.min = 0; 
+				b.defaultValue = 2; 
+				b.step = 1; 
+			</script>
+
 			<div id="district-category">
 				<div id="day">
 					<h3> Day of Week </h3>
