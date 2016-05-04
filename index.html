@@ -166,9 +166,9 @@
                 }
 
                 function changeRadA() {
-                	var newDist = document.getElementById("slidera").value; 
-                	radiusa = newDist * pxpermile; 
-                	svg.select("#point1-radius").remove(); 
+                	var newDist = document.getElementById("slidera").value;
+                	radiusa = newDist * pxpermile;
+                	svg.select("#point1-radius").remove();
 
                 	svg.append("circle")
 		            		.attr("id", "point1-radius")
@@ -181,9 +181,9 @@
                 }
 
                 function changeRadB() {
-                	var newDist = document.getElementById("sliderb").value; 
-                	radiusb = newDist * pxpermile; 
-                	svg.select("#point2-radius").remove(); 
+                	var newDist = document.getElementById("sliderb").value;
+                	radiusb = newDist * pxpermile;
+                	svg.select("#point2-radius").remove();
 
                 	svg.append("circle")
 		            		.attr("id", "point2-radius")
@@ -265,8 +265,8 @@
                         svg.append("g")
                           .append("path")
                           .attr("d", function() {
-                            return "M" + interPoints[0] + "," + interPoints[2] + "A" + radiusa + "," + radiusa +
-                              " 0 0,1 " + interPoints[1] + "," + interPoints[3]+ "A" + radiusa + "," + radiusa +
+                            return "M" + interPoints[0] + "," + interPoints[2] + "A" + radiusa + "," + radiusb +
+                              " 0 0,1 " + interPoints[1] + "," + interPoints[3]+ "A" + radiusa + "," + radiusb +
                               " 0 0,1 " + interPoints[0] + "," + interPoints[2];
                           })
                           .attr('fill', 'red');
@@ -277,8 +277,6 @@
 
                         });
                     }
-
-
 	            })
 
 
@@ -357,7 +355,7 @@
 				</div>
 				<div class="col-sm-2">
 					<b> 7mi </b>
-				</div>	
+				</div>
 				<br>
 				<h4 id="b"> B </h4>
 				<div class="col-sm-2">
@@ -372,17 +370,17 @@
 
 			</div>
 
-			<script> 
-				var a = document.getElementById("slidera"); 
-				a.max = 7; 
-				a.min = 0; 
-				a.defaultValue = 2; 
-				a.step = 1; 
+			<script>
+				var a = document.getElementById("slidera");
+				a.max = 7;
+				a.min = 0;
+				a.defaultValue = 2;
+				a.step = 1;
 				var b = document.getElementById("sliderb");
-				b.max = 7; 
-				b.min = 0; 
-				b.defaultValue = 2; 
-				b.step = 1; 
+				b.max = 7;
+				b.min = 0;
+				b.defaultValue = 2;
+				b.step = 1;
 			</script>
 
 			<div id="district-category">
