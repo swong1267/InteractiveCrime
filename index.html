@@ -122,7 +122,7 @@
 
                     if (filters.length == 0) {
                         svg.selectAll("circle").data(data.data)
-                        .attr("fill", function(incident) {return colorScale(incident.Category); });
+                        .attr("fill", "#1f77b4");
                     } else {
                         svg.selectAll("circle").data(data.data)
                         .filter(function(d) {
@@ -149,7 +149,7 @@
 
                             return !((catCount > 0 && catIndex == -1) || (timeCount > 0 && timeIndex == -1) || (dayCount > 0 && dayIndex == -1))
                         })
-                        .attr("fill", function(incident) {return colorScale(incident.Category); });
+                        .attr("fill", "#1f77b4");
 
                     }
                 }
@@ -261,79 +261,45 @@
 		            clickCount++;
 
                     if (r1 && r2) {
-                        interPoints = intersection(ptax, ptay, radiusa, ptbx, ptby, radiusb);
-                        svg.append("g")
-                          .append("path")
-                          .attr("d", function() {
-                            return "M" + interPoints[0] + "," + interPoints[2] + "A" + radiusa + "," + radiusb +
-                              " 0 0,1 " + interPoints[1] + "," + interPoints[3]+ "A" + radiusa + "," + radiusb +
-                              " 0 0,1 " + interPoints[0] + "," + interPoints[2];
-                          })
-                          .attr('fill', 'red');
+                        svg.selectAll("circle").data(data.data)
+                        .filter(function(incident) {
+                            var incident_coord = incident.Location;
+                            var a_coord = projection.invert([ptax, ptay]);
+                            var b_coord = projection.invert([ptbx, ptby]);
+
+                            var distA = d3.geo.distance(incident_coord, a_coord)*4692;
+                            var distB = d3.geo.distance(incident_coord, b_coord)*4692;
+
+                            var radA = radiusa/pxpermile;
+                            var radB = radiusb/pxpermile;
+
+                            return (distA > radA || distB > radB)
+                        })
+                        .attr("fill", "transparent"); //outside intersection
+
 
                         svg.selectAll("circle").data(data.data)
-                        .filter(function(d) {
-                            var px_coord = projection(d.Location);
+                        .filter(function(incident) {
+                            var incident_coord = incident.Location;
+                            var a_coord = projection.invert([ptax, ptay]);
+                            var b_coord = projection.invert([ptbx, ptby]);
 
-                        });
+                            var distA = d3.geo.distance(incident_coord, a_coord)*4692;
+                            var distB = d3.geo.distance(incident_coord, b_coord)*4692;
+
+                            var radA = radiusa/pxpermile;
+                            var radB = radiusb/pxpermile;
+
+                            return !(distA > radA || distB > radB)
+                        })
+                        .attr("fill", "#1f77b4");
+
+
                     }
 	            })
 
 
-                function intersection(x0, y0, r0, x1, y1, r1) {
-                  var a, dx, dy, d, h, rx, ry;
-                  var x2, y2;
 
-                  /* dx and dy are the vertical and horizontal distances between
-                   * the circle centers.
-                   */
-                  dx = x1 - x0;
-                  dy = y1 - y0;
-
-                  /* Determine the straight-line distance between the centers. */
-                  d = Math.sqrt((dy * dy) + (dx * dx));
-
-                  /* Check for solvability. */
-                  if (d > (r0 + r1)) {
-                    /* no solution. circles do not intersect. */
-                    return false;
-                  }
-                  if (d < Math.abs(r0 - r1)) {
-                    /* no solution. one circle is contained in the other */
-                    return false;
-                  }
-
-                  /* 'point 2' is the point where the line through the circle
-                   * intersection points crosses the line between the circle
-                   * centers.
-                   */
-
-                  /* Determine the distance from point 0 to point 2. */
-                  a = ((r0 * r0) - (r1 * r1) + (d * d)) / (2.0 * d);
-
-                  /* Determine the coordinates of point 2. */
-                  x2 = x0 + (dx * a / d);
-                  y2 = y0 + (dy * a / d);
-
-                  /* Determine the distance from point 2 to either of the
-                   * intersection points.
-                   */
-                  h = Math.sqrt((r0 * r0) - (a * a));
-
-                  /* Now determine the offsets of the intersection points from
-                   * point 2.
-                   */
-                  rx = -dy * (h / d);
-                  ry = dx * (h / d);
-
-                  /* Determine the absolute intersection points. */
-                  var xi = x2 + rx;
-                  var xi_prime = x2 - rx;
-                  var yi = y2 + ry;
-                  var yi_prime = y2 - ry;
-
-                  return [xi, xi_prime, yi, yi_prime];
-                }
 
 
 
