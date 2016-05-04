@@ -14,16 +14,10 @@
 	   		<h1> City of San Francisco Interactive Crime Map | April 1 - 15, 2016 </h1>
 	   	</div>
 
-        <div class="category_filter_options">
-            <input class="filter_button" id="a_button" type="checkbox" name="BURGLARY">BURGLARY</input><br>
-            <input class="Filter_button" id="b_button" type="checkbox">c2</input><br>
-            <input class="filter_button" id="c_button" type="checkbox">c3</input><br>
-        </div>
-
 	    <div id="map-area">
 	        <script type="text/javascript">
 
-
+                var filters = [];
 	            var data;
 
 	            d3.json("scpd_incidents.json", function(error, json) {
@@ -63,31 +57,29 @@
 
                               var filtered_data = data;
                               console.log(filtered_data);
-                              var filtered_data = d3.selectAll(".filter_button").on("change", function () {
-                                                      console.log(this.name);
-                                                      var selected = this.name,
-                                                      display = this.checked ? "inline" : "none";
+                              // var filtered_data = d3.selectAll(".filter_button").on("change", function () {
+                              //                         console.log(this.name);
+                              //                         var selected = this.name,
+                              //                         display = this.checked ? "inline" : "none";
 
-                                                      var results = d3.selectAll("circle")
-                                                      .filter(function(incident) {
-                                                          var n = incident.Category.localeCompare("BURGLARY");
-                                                          return n == 0 })
-                                                      .attr("display", display);
+                              //                         var results = svg.selectAll("circle")
+                              //                         .filter(function(incident) {
+                              //                             var category = incident.Category;
+                              //                             var district = incident.District;
+                              //                             var str2 = "BURGLARY";
+                              //                             var n = str1.localeCompare(str2);
+                              //                             return n == 0 })
+                              //                         .attr("display", display);
 
-                                                      console.log("results" + results);
-                                                      return results;
-                                                  });
+                              //                         console.log("results" + results);
+                              //                         return results;
+                              //                     });
 
                               var colorScale = d3.scale.category10();
                               var circles = svg.selectAll("circle").data(filtered_data.data);
 
                               circles.enter()
                                   .append("circle")
-                                  .filter(function(incident) {
-                                      var str1 = incident.Category;
-                                      var str2 = "BURGLARY";
-                                      var n = str1.localeCompare(str2);
-                                      return n == 0 })
                                   .attr("r", "4px")
                                   .attr("data-id", function(incident) {return incident.IncidentNumber; })
                                   .attr("cx", function(incident) {return projection(incident.Location)[0]; })
@@ -99,6 +91,49 @@
 
 
                           }
+
+
+
+
+                           function filter(filter_btn){
+
+                                var index = filters.indexOf(filter_btn.value);
+                                console.log(filters);
+                                if (index == -1) {
+                                    filters.push(filter_btn.value);
+                                    console.log(filters);
+                                } else {
+                                    filters.splice(index, 1);
+                                    console.log(filters);
+                                }
+
+                                filter_data();
+                            };
+
+                            function filter_data() {
+                                var colorScale = d3.scale.category10();
+                                var catIndex = filters.indexOf(d.Category);
+                                var dayIndex = filters.indexOf(d.DayOfWeek);
+
+                                if (filters.length == 0) {
+                                    svg.selectAll("circle").data(data.data)
+                                    .attr("fill", function(incident) {return colorScale(incident.Category); });
+                                } else {
+                                    svg.selectAll("circle").data(data.data)
+                                    .filter(function(d) {
+                                        var timeIndex = convertTime(d.Time);
+                                        return (catIndex == -1 && dayIndex == -1 && timeIndex == -1) //does not match any filters
+                                    })
+                                    .attr("fill", "transparent");
+
+                                    svg.selectAll("circle").data(data.data)
+                                    .filter(function(d) {
+                                        var timeIndex = convertTime(d.Time);
+                                        return !(catIndex == -1 && dayIndex == -1 && timeIndex == -1)
+                                    })
+                                    .attr("fill", function(incident) {return colorScale(incident.Category); });
+                                }
+                            }
 
 	        </script>
 	    </div>
@@ -112,7 +147,28 @@
 			</div>
 			<div id="district-category">
 				<div id="district">
-					<h3> District </h3>
+					<h3> Day of Week </h3>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="Sunday" onchange="filter(this)">Sunday</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="Monday" onchange="filter(this)">Monday</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="Tuesday" onchange="filter(this)">Tuesday</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="Wednesday" onchange="filter(this)">Wednesday</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="Thursday" onchange="filter(this)">Thursday</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="Friday" onchange="filter(this)">Friday</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="Saturday" onchange="filter(this)">Saturday</label>
+                        </div>
 				</div>
 				<div id="category">
 					<h3> Category </h3>
@@ -122,18 +178,18 @@
 				<h3> Time of Day </h3>
 					<div id="daytime">
 						<div class="checkbox">
-							<label><input type="checkbox" value="">6am - 12pm</label>
+							<label><input type="checkbox" value="1" onchange="filter(this)">6am - 12pm</label>
 						</div>
 						<div class="checkbox">
-						 	<label><input type="checkbox" value="">12pm - 6pm</label>
+						 	<label><input type="checkbox" value="2" onchange="filter(this)">12pm - 6pm</label>
 						</div>
 					</div>
 					<div id="nighttime">
 						<div class="checkbox">
-							<label><input type="checkbox" value="">6pm - 12am</label>
+							<label><input type="checkbox" value="3" onchange="filter(this)">6pm - 12am</label>
 						</div>
 						<div class="checkbox">
-							<label><input type="checkbox" value="">12am - 6am</label>
+							<label><input type="checkbox" value="4" onchange="filter(this)">12am - 6am</label>
 						</div>
 					</div>
 			</div>
