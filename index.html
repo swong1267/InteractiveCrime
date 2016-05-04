@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <title>CS448B Assignment 3</title>
         <script type="text/javascript" src="d3/d3.js"></script>
-        <script type="text/javascript" src="slider/js/bootstrap-slider.js"></script>s
-        <link rel="stylesheet" type="text/css" href="index.css">
-        <link rel="stylesheet" type="text/css" href="slider/css/slider.css">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<!--         <script type="text/javascript" src="slider/js/bootstrap-slider.js"></script>s
+ -->        <link rel="stylesheet" type="text/css" href="index.css">
+<!--         <link rel="stylesheet" type="text/css" href="slider/css/slider.css">
+ -->        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     </head>
 	    <body>
@@ -25,6 +25,8 @@
 	            var ptay;
 	            var ptbx;
 	            var ptby;
+	            var radiusa = 3; 
+	            var radiusb = 3; 
 
 	            d3.json("scpd_incidents.json", function(error, json) {
 	                console.log(json);
@@ -174,6 +176,11 @@
 		            		.style("fill", "#FF00FF")
 		            		.style("stroke", "black")
 		            		.style("stroke-width", 2)
+
+		            	svg.append("circle")
+		            		.attr("id", "point1-radius")
+		            		.attr("transform", "translate(" + ptax + "," + ptay + ")")
+		            		.attr()
 		            } else {
 
 		            	if(clickCount > 2) {
@@ -205,10 +212,20 @@
 			<div id="radius-selection">
 				<h3> Radius </h3>
 				<p> A </p>
-				<b> 0 mi </b> <input id="slidera" type="text" class="span2" value="" data-slider-min="0" data-slider-max="7" data-slider-step="1" data-slider-value="3"/> <b> 7 mi </b>
+				<textarea class="form-control" rows="1" id="radiusainput"></textarea>
+				<button onclick="populate()" id="radiusabutton">Enter</button>
+				<script>
+					function populate()
+					{
+						radiusa = document.getElementById("radiusainput").value; 
+					}
+
+					console.log("HERE"+radiusa);
+				</script>
+<!-- 				<b> 0 mi </b> <input id="slidera" type="text" class="span2" value="" data-slider-min="0" data-slider-max="7" data-slider-step="1" data-slider-value="3"/> <b> 7 mi </b>
 				<script> 
 					var slider = new Slider('#slidera', {});
-				</script>
+				</script> -->
 				<p> B </p>
 			</div>
 			<div id="district-category">
